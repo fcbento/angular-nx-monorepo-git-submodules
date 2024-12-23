@@ -1,101 +1,83 @@
-# AngularNxMonorepoGitSubmodules
+# Angular NX monorepo and Git submodules
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Minimal setup for using Nx monorepos for an Angular based project using git submodules. It basically enables to have multiple teams working in the same project but in different repositories, enhancing developer productivity. I followed this [tutorial](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial) to achieve the result and did a little research to understand about [git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules). The main app holds the codebase for multiple projects, components, libraries or shared UIs related of the same system.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Prerequisites
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+Requirements for running the app locally
+- [Node](https://nodejs.org/)
+- [Npm](https://www.npmjs.com/)
 
-## Run tasks
 
-To run the dev server for your app, use:
+## How it was achieved
 
-```sh
-npx nx serve angular-nx-monorepo-git-submodules
+##### Create the workspace and add a remote git repository.
+```npx create-nx-workspace@latest angular-nx-monorepo-git-submodules --preset=angular-monorepo --skipGit```
+
+##### Go into the repository
+```cd angular-nx-monorepo-git-submodules```
+
+##### Remove the default created app so that we can create a new app and add a gitsubmodule to it. Maybe review this step?
+```rm -rf apps/angular-nx-monorepo-git-submodules```
+
+##### Git initialization (main repository)
+```
+git init
+git add .
+git commit -m "feat: create workspace"
+git branch -M main
+git remote add origin https://github.com/fcbento/angular-nx-monorepo-git-submodules.git
+git push -u origin main
 ```
 
-To create a production bundle:
+### Adding submodules
 
-```sh
-npx nx build angular-nx-monorepo-git-submodules
-```
+#### - Create a new git repository
 
-To see all available targets to run for a project, run:
+```cd apps```
 
-```sh
-npx nx show project angular-nx-monorepo-git-submodules
-```
+##### Add a git submodule
+```git submodule add https://github.com/fcbento/angular-nx-project-example.git```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+##### Create new Angular app
+```npx nx g @nx/angular:app apps/angular-nx-project-example```
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+##### Serve
+```npx nx serve app-example-one```
 
-## Add new projects
+##### Get changes from monorepo
+```git submodule foreach git pull```
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+### Git submodules
 
-Use the plugin's generator to create new projects.
+<img alt="example" width="800" src="gitsubmodule.png">
 
-To generate a new application, use:
+### Main application
 
-```sh
-npx nx g @nx/angular:app demo
-```
+<img alt="example" width="800" src="commit.png">
 
-To generate a new library, use:
+### TODO
 
-```sh
-npx nx g @nx/angular:lib mylib
-```
+- [ ] Create a monorepo for a shared library
+- [ ] Improve this documentation
+  
+## Built With
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+This was created with the following tech stack.
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## [Nx](https://nx.dev/)
 
-## Set up CI!
+[![My Skills](https://skillicons.dev/icons?i=angular,nodejs,typescript,vscode&perline=10)](https://skillicons.dev)
 
-### Step 1
 
-To connect to Nx Cloud, run the following command:
+## Top contributors
 
-```sh
-npx nx connect
-```
+<a href="https://github.com/fcbento/node-prisma-docker-postgresql-ci/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=fcbento/node-prisma-docker-postgresql-ci" alt="contrib.rocks image"/>
+</a>
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+## Contact
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+[![linkedin](https://skillicons.dev/icons?i=linkedin)](https://linkedin.com/in/felipe-bento)
+[![discord](https://skillicons.dev/icons?i=discord)](https://discordapp.com/users/413141379074490369)
+[![gmail](https://skillicons.dev/icons?i=gmail)](mailto:felipe.16costa@gmail.com)

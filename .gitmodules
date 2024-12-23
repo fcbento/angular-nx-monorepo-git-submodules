@@ -1,0 +1,3 @@
+[submodule "apps/angular-nx-project-example"]
+	path = apps/angular-nx-project-example
+	url = https://github.com/fcbento/angular-nx-project-example.git
